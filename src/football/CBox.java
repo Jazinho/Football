@@ -194,7 +194,7 @@ class CBox extends JPanel {
             else if(isMiddle())
                 tileName="middle";
         try {
-            image = ImageIO.read(new File("src\\resources\\"+tileName+".png"));
+            image = ImageIO.read(new File("src/resources/"+tileName+".png"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }

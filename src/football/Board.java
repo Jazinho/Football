@@ -354,7 +354,7 @@ public class Board extends JFrame {
         //this.setLocation(315, 5);
         this.setTitle("Football");
 
-        File f = new File("src\\resources\\background.jpg");
+        File f = new File("src/resources/background.jpg");
         BufferedImage myImage = null;
         try {
             myImage = ImageIO.read(f);
