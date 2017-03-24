@@ -1,100 +1,145 @@
 package football;
 
 import java.awt.*;
-
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
-
 import static java.lang.System.exit;
 
 
 public class Board extends JFrame {
-    static String winner="NULL";
-    boolean endTurn=false;
-    static int width=11,height=15;
+    private CPU cpu;
+    private User user=null;
+
+    private static String winner="NULL";
+    private static int width=11,height=15;
 
     private int BoardHeight=668;
     private int BoardWidth=478;
 
-    public int current_ball_position_X=5;
-    public int current_ball_position_Y=7;
+    private int current_ball_position_X=5;
+    private int current_ball_position_Y=7;
 
     private static CBox[][] Fields = new CBox[height][width];
 
-    int FirstClickedX;
-    int FirstClickedY;
-    static char Turn = 'U';
+    private char Turn = 'U';
 
-    public void switchTurn(){
-        if(Turn=='U')
-            Turn='C';
-        else Turn='U';
+public void theEnd(){
+    System.out.println("THE WINNER IS: "+getWinner());
+    while(true){}
+}
 
-        if(Turn=='C')
-            cpuMove();
+    public CPU getCpu() {
+        return cpu;
     }
-    CBox TemporaryCBox = null;
-    private boolean IsTimerStarted;
 
-    public static char getTurn(){
+    public void setCpu(CPU cpu) {
+        this.cpu = cpu;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public static String getWinner() {
+        return winner;
+    }
+
+
+    public static void setWinner(String winner) {
+        Board.winner = winner;
+    }
+
+    public static int getwidth() {
+        return width;
+    }
+
+
+    public static void setwidth(int width) {
+        Board.width = width;
+    }
+
+    public static int getheight() {
+        return height;
+    }
+
+    public static void setheight(int height) {
+        Board.height = height;
+    }
+
+    public int getBoardHeight() {
+        return BoardHeight;
+    }
+
+    public void setBoardHeight(int boardHeight) {
+        BoardHeight = boardHeight;
+    }
+
+    public int getBoardWidth() {
+        return BoardWidth;
+    }
+
+    public void setBoardWidth(int boardWidth) {
+        BoardWidth = boardWidth;
+    }
+
+    public int getCurrent_ball_position_X() {
+        return current_ball_position_X;
+    }
+
+    public void setCurrent_ball_position_X(int current_ball_position_X) {
+        this.current_ball_position_X = current_ball_position_X;
+    }
+
+    public int getCurrent_ball_position_Y() {
+        return current_ball_position_Y;
+    }
+
+    public void setCurrent_ball_position_Y(int current_ball_position_Y) {
+        this.current_ball_position_Y = current_ball_position_Y;
+    }
+
+    public static CBox[][] getFields() {
+        return Fields;
+    }
+
+    public static void setFields(CBox[][] fields) {
+        Fields = fields;
+    }
+
+    public char getTurn() {
         return Turn;
     }
 
-    public void cpuMove(){
-        if(checkIfPossibleMovesExist()){
-            System.out.println("AAA");
-            Random random = new Random();
-            boolean condition=true;
-            while(condition) {
-                int x = random.nextInt(3)-1;
-                int y = random.nextInt(3)-1;
-                FirstClickedX = x+current_ball_position_X;
-                FirstClickedY = y+current_ball_position_Y;
-                TemporaryCBox = Fields[FirstClickedY][FirstClickedX];
-                if (((Math.abs(current_ball_position_X - FirstClickedX) > 1) || (Math.abs(current_ball_position_Y - FirstClickedY) > 1))
-                        || ((current_ball_position_X - FirstClickedX == 0) && (current_ball_position_Y - FirstClickedY == 0)))
-                    continue;
-                if (FirstClickedY == 0 || FirstClickedY == height - 1 || FirstClickedX == 0 || FirstClickedX == width - 1 || (FirstClickedY == 1 && FirstClickedX < 4)
-                        || (FirstClickedY == 1 && FirstClickedX > 6) || (FirstClickedY == height - 2 && FirstClickedX < 4)
-                        || (FirstClickedY == height - 2 && FirstClickedX > 6)
-                        || (current_ball_position_X == 3 && current_ball_position_Y == 2 && FirstClickedX == 4 && FirstClickedY == 1)
-                        || (current_ball_position_X == 7 && current_ball_position_Y == 2 && FirstClickedX == 6 && FirstClickedY == 1)
-                        || (current_ball_position_X == 3 && current_ball_position_Y == height - 3 && FirstClickedX == 4 && FirstClickedY == height - 2)
-                        || (current_ball_position_X == 7 && current_ball_position_Y == height - 3 && FirstClickedX == 6 && FirstClickedY == height - 2))
-                    continue;
-                if ((current_ball_position_X < FirstClickedX && current_ball_position_Y < FirstClickedY && !TemporaryCBox.isLeft_up())
-                        || (current_ball_position_X < FirstClickedX && current_ball_position_Y > FirstClickedY && !TemporaryCBox.isLeft_down())
-                        || (current_ball_position_X > FirstClickedX && current_ball_position_Y < FirstClickedY && !TemporaryCBox.isRight_up())
-                        || (current_ball_position_X > FirstClickedX && current_ball_position_Y > FirstClickedY && !TemporaryCBox.isRight_down())
-                        || (current_ball_position_X == FirstClickedX && current_ball_position_Y < FirstClickedY && !TemporaryCBox.isUp())
-                        || (current_ball_position_X == FirstClickedX && current_ball_position_Y > FirstClickedY && !TemporaryCBox.isDown())
-                        || (current_ball_position_X > FirstClickedX && current_ball_position_Y == FirstClickedY && !TemporaryCBox.isRight())
-                        || (current_ball_position_X < FirstClickedX && current_ball_position_Y == FirstClickedY && !TemporaryCBox.isLeft())) {
-                    boolean cond = TemporaryCBox.isMiddle();
-                    System.out.println(FirstClickedX+" "+FirstClickedY);
-                    executeMove();
-                    draw(width, height);
-                    if(cond) {
-                        switchTurn();
-                        condition = false;
-                    }
-                }
-            }
-
-        }
-        else{
-            exit(0);
-        }
-
+    public void setTurn(char turn) {
+        Turn = turn;
     }
 
+
+
+
+    public void switchTurn(){
+        if(getTurn()=='U')
+            setTurn('C');
+        else setTurn('U');
+
+        if(getTurn()=='C')
+            cpu.cpuMove();
+    }
+
+
+
+    public CBox getCBox(int x,int y){
+        return Fields[y][x];
+    }
 
 
     public void initialize(int width, int height) {
@@ -178,49 +223,11 @@ public class Board extends JFrame {
 
 
 
+
     }
     /////////////////////////////////////////////////////
 
-    public void move(MouseEvent e){
-        System.out.println("QQQQQ");
-        {
-            if(Turn=='U')
-            {
-                System.out.println("BBBB");
-                FirstClickedX = ((CBox)e.getSource()).get_X();
-                FirstClickedY = ((CBox)e.getSource()).get_Y();
-                TemporaryCBox = (CBox)e.getSource();
-                if (((Math.abs(current_ball_position_X-FirstClickedX)>1) ||(Math.abs(current_ball_position_Y-FirstClickedY)>1))
-                        ||((current_ball_position_X-FirstClickedX==0)&&(current_ball_position_Y-FirstClickedY==0)))
-                    return;
-                if(FirstClickedY==0||FirstClickedY==height-1||FirstClickedX==0||FirstClickedX==width-1 ||(FirstClickedY==1&&FirstClickedX<4)
-                        ||(FirstClickedY==1&&FirstClickedX>6)||(FirstClickedY==height-2&&FirstClickedX<4)
-                        ||(FirstClickedY==height-2&&FirstClickedX>6)
-                        ||(current_ball_position_X==3 && current_ball_position_Y==2 && FirstClickedX==4 && FirstClickedY==1)
-                        ||(current_ball_position_X==7 && current_ball_position_Y==2 && FirstClickedX==6 && FirstClickedY==1)
-                        ||(current_ball_position_X==3 && current_ball_position_Y==height-3 && FirstClickedX==4 && FirstClickedY==height-2)
-                        ||(current_ball_position_X==7 && current_ball_position_Y==height-3 && FirstClickedX==6 && FirstClickedY==height-2))
-                    return;
-                if((current_ball_position_X<FirstClickedX && current_ball_position_Y<FirstClickedY && !TemporaryCBox.isLeft_up() )
-                        ||(current_ball_position_X<FirstClickedX && current_ball_position_Y>FirstClickedY && !TemporaryCBox.isLeft_down())
-                        ||(current_ball_position_X>FirstClickedX && current_ball_position_Y<FirstClickedY && !TemporaryCBox.isRight_up())
-                        ||(current_ball_position_X>FirstClickedX && current_ball_position_Y>FirstClickedY && !TemporaryCBox.isRight_down())
-                        ||(current_ball_position_X==FirstClickedX && current_ball_position_Y<FirstClickedY && !TemporaryCBox.isUp())
-                        ||(current_ball_position_X==FirstClickedX && current_ball_position_Y>FirstClickedY && !TemporaryCBox.isDown())
-                        ||(current_ball_position_X>FirstClickedX && current_ball_position_Y==FirstClickedY && !TemporaryCBox.isRight())
-                        ||(current_ball_position_X<FirstClickedX && current_ball_position_Y==FirstClickedY && !TemporaryCBox.isLeft()))
-                {
-                    boolean cond = TemporaryCBox.isMiddle();
-                    executeMove();
-                    draw(width, height);
-                    if(cond) {
-                        switchTurn();
-                    }
-                }
-            }
 
-        }
-    }
 
     public boolean checkIfPossibleMovesExist(){
         for(int y=current_ball_position_Y-1; y<=current_ball_position_Y+1; y++)
@@ -247,7 +254,7 @@ public class Board extends JFrame {
         return false;
     }
 
-    private boolean executeMove(){
+    public boolean executeMove(CBox TemporaryCBox){
 
         int x = TemporaryCBox.get_X()-current_ball_position_X;
         int y = TemporaryCBox.get_Y()-current_ball_position_Y;
@@ -331,7 +338,7 @@ public class Board extends JFrame {
         if(current_ball_position_Y==height-2 &&(current_ball_position_X==4 || current_ball_position_X==5 || current_ball_position_X==6))
             winner="CPU";
         if(winner!="NULL")
-            exit(0);
+            theEnd();
 
 
         return true;
@@ -341,7 +348,7 @@ public class Board extends JFrame {
     public void draw(int width, int height){
         for(int i=0; i<height; i++)
             for(int j=0; j<width; j++)
-                (Fields[i][j]).maluj();
+                (Fields[i][j]).paintIt();
     }
 
     public Board(){
@@ -356,34 +363,35 @@ public class Board extends JFrame {
 
         File f = new File("src/resources/background.jpg");
         BufferedImage myImage = null;
-        try {
-            myImage = ImageIO.read(f);
+     /*   try {
+          myImage = ImageIO.read(f);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        IsTimerStarted = true;
+*/
 //        Pict = new ImageIcon(getClass().getResource("board.jpg"));
         //     this.setContentPane(new BoardBackground(myImage));;
         GridLayout layout = new GridLayout(height,width);
         setLayout(layout);
+        setUser(new User(this));
+        setCpu(new CPU(this));
         for(int i=0; i < height; i++)
             for(int j=0; j<width; j++){
                 CBox cb = new CBox(Fields[i][j],j,i);
                 cb.addMouseListener(new MouseAdapter(){
                     public void mouseClicked(MouseEvent e){
-
-                        move(e);
-                        if(!checkIfPossibleMovesExist())
-                            exit(0);
-
+                        user.move(e);
+                        if(!checkIfPossibleMovesExist()) {
+                            setWinner("CPU");
+                            theEnd();
+                        }
                     }
                 });
                 add(cb);
                 Fields[i][j]=cb;
             }
         this.setVisible(true);
-        IsTimerStarted = false;
     }
 
     public static void main(String[] arg){

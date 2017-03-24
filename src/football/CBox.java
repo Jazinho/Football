@@ -16,8 +16,8 @@ import java.io.IOException;
 
 class CBox extends JPanel {
 
-    int XX;
-    int YY;
+   private int XX;
+   private int YY;
 
     BufferedImage image;
     private boolean left=false;
@@ -143,7 +143,7 @@ class CBox extends JPanel {
     public CBox(int x, int y) {
         XX=x;
         YY=y;
-        maluj();
+        paintIt();
     }
     public CBox(CBox cbox,int x, int y) {
         this.left=cbox.isLeft();
@@ -158,10 +158,10 @@ class CBox extends JPanel {
         this.middle=cbox.isMiddle();
         XX=x;
         YY=y;
-        maluj();
+        paintIt();
     }
 
-    public void maluj(){
+    public void paintIt(){
 
         String tileName ="";
         if(isUp()){
