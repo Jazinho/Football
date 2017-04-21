@@ -264,21 +264,12 @@ public void theEnd(){
                     case -1:
                         TemporaryCBox.setRight_down(true);
                         Fields[current_ball_position_Y][current_ball_position_X].setLeft_up(true);
-                        TemporaryCBox.setRight_down(true);
-                        Fields[current_ball_position_Y][current_ball_position_X].setLeft_up(true);
                         break;
                     case 0:
                         TemporaryCBox.setRight(true);
                         Fields[current_ball_position_Y][current_ball_position_X].setLeft(true);
-
-                        TemporaryCBox.setRight(true);
-                        Fields[current_ball_position_Y][current_ball_position_X].setLeft(true);
-
                         break;
                     case 1:
-                        TemporaryCBox.setRight_up(true);
-                        Fields[current_ball_position_Y][current_ball_position_X].setLeft_down(true);
-
                         TemporaryCBox.setRight_up(true);
                         Fields[current_ball_position_Y][current_ball_position_X].setLeft_down(true);
                         break;
@@ -289,15 +280,8 @@ public void theEnd(){
                     case -1:
                         TemporaryCBox.setDown(true);
                         Fields[current_ball_position_Y][current_ball_position_X].setUp(true);
-
-                        TemporaryCBox.setDown(true);
-                        Fields[current_ball_position_Y][current_ball_position_X].setUp(true);
                         break;
-
                     case 1:
-                        TemporaryCBox.setUp(true);
-                        Fields[current_ball_position_Y][current_ball_position_X].setDown(true);
-
                         TemporaryCBox.setUp(true);
                         Fields[current_ball_position_Y][current_ball_position_X].setDown(true);
                         break;
@@ -308,18 +292,12 @@ public void theEnd(){
                     case -1:
                         TemporaryCBox.setLeft_down(true);
                         Fields[current_ball_position_Y][current_ball_position_X].setRight_up(true);
-                        TemporaryCBox.setLeft_down(true);
-                        Fields[current_ball_position_Y][current_ball_position_X].setRight_up(true);
                         break;
                     case 0:
                         TemporaryCBox.setLeft(true);
                         Fields[current_ball_position_Y][current_ball_position_X].setRight(true);
-                        TemporaryCBox.setLeft(true);
-                        Fields[current_ball_position_Y][current_ball_position_X].setRight(true);
                         break;
                     case 1:
-                        TemporaryCBox.setLeft_up(true);
-                        Fields[current_ball_position_Y][current_ball_position_X].setRight_down(true);
                         TemporaryCBox.setLeft_up(true);
                         Fields[current_ball_position_Y][current_ball_position_X].setRight_down(true);
                         break;
@@ -340,9 +318,7 @@ public void theEnd(){
         if(winner!="NULL")
             theEnd();
 
-
         return true;
-
     }
 
     public void draw(int width, int height){
