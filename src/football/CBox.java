@@ -4,22 +4,14 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-class CBox extends JPanel {
+class CBox extends JPanel implements Serializable{
 
    private int XX;
    private int YY;
 
-    BufferedImage image;
+    public transient BufferedImage image;
     private boolean left=false;
     private boolean right=false;
     private boolean up=false;
@@ -206,12 +198,31 @@ class CBox extends JPanel {
         this.setVisible(true);
     }
 
+    public boolean hasDirection(int i, int j){
+        if(i==-1){
+            if(j==-1)return isLeft_up();
+            if(j==0)return isLeft();
+            if(j==1)return isLeft_down();
+        }else if(i==0){
+            if(j==-1)return isUp();
+            if(j==1)return isDown();
+        }else if(i==1){
+            if(j==-1)return isRight_up();
+            if(j==0)return isRight();
+            if(j==1)return isRight_down();
+        }
+        System.out.println("ŻADEN Z KIERUNKÓW NIE ZOSTAŁ WYBRANY");
+        System.exit(0);
+        return true;
+    }
 
+    public boolean hasAnyLine(){
+        return up || down || left || right || right_down || right_up || left_down || left_up;
+    }
 
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(image, 0, 0, this);
     }
-
 }
