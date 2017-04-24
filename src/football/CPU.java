@@ -54,7 +54,6 @@ public class CPU implements Serializable{
         } else {
             exit(0);
         }
-        System.out.println("WYCHODZE");
     }
 
     private List<CBox> calculateMoves(Board board, List<Coords> possibilities, int curX, int curY) {
@@ -86,11 +85,8 @@ public class CPU implements Serializable{
             }
 
             for (Coords coords : possibilities) {
-                if (!coords.isExplored()) { //Jeśli dany punkt nie został jeszcze spenetrowany to zaznacz go na mapie
+                if (!coords.isFinal() && !coords.isExplored()) { //Jeśli dany punkt nie jest punktem końcowy to spenetruj go
                     board.markMoveOnMap(coords.getcBox());
-                }
-
-                if (!coords.isFinal()) { //Jeśli dany punkt nie jest punktem końcowy to spenetruj go
                     coords.setExplored(true);
                     res = calculateMoves(board, possibilities, coords.getcBox().get_X(), coords.getcBox().get_Y());
                     // jakby to wywołanie przeniesć poza powyżsżą petle for to wtedy najpierw szukalibysmy wszerz, a tak to szukamy wgłąb
