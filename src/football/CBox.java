@@ -24,6 +24,7 @@ class CBox extends JPanel implements Serializable{
     private boolean middle=false;
 
     public boolean isEmpty() {return empty;}
+
     public void setEmpty(boolean empty) {
         this.empty = empty;
         if(empty==true) {
@@ -38,7 +39,9 @@ class CBox extends JPanel implements Serializable{
             this.setLeft_up(false);
         }
     }
+
     public boolean isMiddle() {return middle;}
+
     public void setMiddle(boolean middle) {
         this.middle = middle;
         if(middle==true) {
@@ -53,10 +56,13 @@ class CBox extends JPanel implements Serializable{
             this.setLeft_up(false);
         }
     }
+
     public boolean isRight_up() {return right_up;}
+
     public boolean isLeft() {
         return left;
     }
+
     public void setLeft(boolean left) {
         this.left = left;
         if(left==true) {
@@ -64,9 +70,11 @@ class CBox extends JPanel implements Serializable{
             this.setEmpty(false);
         }
     }
+
     public boolean isRight() {
         return right;
     }
+
     public void setRight(boolean right) {
         this.right = right;
         if(right==true) {
@@ -74,9 +82,11 @@ class CBox extends JPanel implements Serializable{
             this.setEmpty(false);
         }
     }
+
     public boolean isUp() {
         return up;
     }
+
     public void setUp(boolean up) {
         this.up = up;
         if (up == true) {
@@ -84,9 +94,11 @@ class CBox extends JPanel implements Serializable{
             this.setEmpty(false);
         }
     }
+
     public boolean isDown() {
         return down;
     }
+
     public void setDown(boolean down) {
         this.down = down;
         if(down==true) {
@@ -94,9 +106,11 @@ class CBox extends JPanel implements Serializable{
             this.setEmpty(false);
         }
     }
+
     public boolean isLeft_up() {
         return left_up;
     }
+
     public void setLeft_up(boolean left_up) {
         this.left_up = left_up;
         if(left_up==true) {
@@ -104,7 +118,9 @@ class CBox extends JPanel implements Serializable{
             this.setEmpty(false);
         }
     }
+
     public boolean isLeft_down() {return left_down;}
+
     public void setLeft_down(boolean left_down) {
         this.left_down = left_down;
         if (left_down == true) {
@@ -112,6 +128,7 @@ class CBox extends JPanel implements Serializable{
             this.setEmpty(false);
         }
     }
+
     public void setRight_up(boolean right_up) {
         this.right_up = right_up;
         if (right_up == true) {
@@ -119,9 +136,11 @@ class CBox extends JPanel implements Serializable{
             this.setEmpty(false);
         }
     }
+
     public boolean isRight_down() {
         return right_down;
     }
+
     public void setRight_down(boolean right_down) {
         this.right_down = right_down;
         if (right_down == true) {
@@ -154,7 +173,6 @@ class CBox extends JPanel implements Serializable{
     }
 
     public void paintIt(){
-
         String tileName ="";
         if(isUp()){
             tileName=tileName.concat("1");
@@ -193,8 +211,6 @@ class CBox extends JPanel implements Serializable{
 
         this.setOpaque(false);
         validate();
-        //this.add(panel1);
-        // this.pack();
         this.setVisible(true);
     }
 
@@ -219,7 +235,6 @@ class CBox extends JPanel implements Serializable{
     public boolean hasAnyLine(){
         return up || down || left || right || right_down || right_up || left_down || left_up;
     }
-
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

@@ -17,7 +17,6 @@ public class User implements Serializable {
         width=board.getwidth();
     }
 
-
     public void move(MouseEvent e){
         System.out.println("WCHODZE");
         {
@@ -57,7 +56,6 @@ public class User implements Serializable {
                     }
                 }
             }
-
         }
     }
 }

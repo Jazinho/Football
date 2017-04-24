@@ -8,7 +8,6 @@ import static java.lang.System.exit;
 
 public class CPU implements Serializable{
     Board board;
-    int FirstClickedX, FirstClickedY;
     int current_ball_position_X, current_ball_position_Y;
     CBox TemporaryCBox;
     int width, height;
@@ -19,7 +18,6 @@ public class CPU implements Serializable{
         width = 11;
     }
 
-
     public void cpuMove() {
         if (board.checkIfPossibleMovesExist()) {
 
@@ -29,17 +27,13 @@ public class CPU implements Serializable{
                 current_ball_position_X = board.getCurrent_ball_position_X();
                 current_ball_position_Y = board.getCurrent_ball_position_Y();
 
-
                 List<CBox> list = calculateMoves(board.cloneIt(), null, board.getCurrent_ball_position_X(), board.getCurrent_ball_position_Y());
                 boolean cond = true;
 
                 for (CBox cBox : list) {
                     TemporaryCBox = board.getCBox(cBox.get_X(), cBox.get_Y());
-
                     board.executeMove(TemporaryCBox);
-
                     board.draw(width, height);
-
                 }
 
                 if (!board.checkIfPossibleMovesExist() && cond) {
@@ -52,57 +46,10 @@ public class CPU implements Serializable{
 
                 //TODO Refactor isMiddle to isInside in whole project
                 //TODO Delete all redundant images
-                //TODO Delete redundant code in 'Board'
-                //TODO SetResizable in Board() to false
                 //TODO Fix sizes in Board() initialization
                 //TODO i oraz j są w złej kolejności u mnie
                 //Todo Zmienić kolejność dodawania do possibilities (najpierw środek, potem te boczne)
 
-                /*
-                int x = list.get(0).getX();
-                int y = list.get(0).getY();
-
-
-                FirstClickedX = x+current_ball_position_X;
-                FirstClickedY = y+current_ball_position_Y;
-                TemporaryCBox = board.getCBox(FirstClickedX,FirstClickedY);
-
-                if (((Math.abs(current_ball_position_X - FirstClickedX) > 1) || (Math.abs(current_ball_position_Y - FirstClickedY) > 1))
-                        || ((current_ball_position_X - FirstClickedX == 0) && (current_ball_position_Y - FirstClickedY == 0)))
-                    continue;
-                if (FirstClickedY == 0 || FirstClickedY == height - 1 || FirstClickedX == 0 || FirstClickedX == width - 1 || (FirstClickedY == 1 && FirstClickedX < 4)
-                        || (FirstClickedY == 1 && FirstClickedX > 6) || (FirstClickedY == height - 2 && FirstClickedX < 4)
-                        || (FirstClickedY == height - 2 && FirstClickedX > 6)
-                        || (current_ball_position_X == 3 && current_ball_position_Y == 2 && FirstClickedX == 4 && FirstClickedY == 1)
-                        || (current_ball_position_X == 7 && current_ball_position_Y == 2 && FirstClickedX == 6 && FirstClickedY == 1)
-                        || (current_ball_position_X == 3 && current_ball_position_Y == height - 3 && FirstClickedX == 4 && FirstClickedY == height - 2)
-                        || (current_ball_position_X == 7 && current_ball_position_Y == height - 3 && FirstClickedX == 6 && FirstClickedY == height - 2))
-                    continue;
-                if ((current_ball_position_X < FirstClickedX && current_ball_position_Y < FirstClickedY && !TemporaryCBox.isLeft_up())
-                        || (current_ball_position_X < FirstClickedX && current_ball_position_Y > FirstClickedY && !TemporaryCBox.isLeft_down())
-                        || (current_ball_position_X > FirstClickedX && current_ball_position_Y < FirstClickedY && !TemporaryCBox.isRight_up())
-                        || (current_ball_position_X > FirstClickedX && current_ball_position_Y > FirstClickedY && !TemporaryCBox.isRight_down())
-                        || (current_ball_position_X == FirstClickedX && current_ball_position_Y < FirstClickedY && !TemporaryCBox.isUp())
-                        || (current_ball_position_X == FirstClickedX && current_ball_position_Y > FirstClickedY && !TemporaryCBox.isDown())
-                        || (current_ball_position_X > FirstClickedX && current_ball_position_Y == FirstClickedY && !TemporaryCBox.isRight())
-                        || (current_ball_position_X < FirstClickedX && current_ball_position_Y == FirstClickedY && !TemporaryCBox.isLeft())) {
-                    boolean cond = TemporaryCBox.isMiddle();
-                    System.out.println("MID: "+cond);
-                    System.out.println(FirstClickedX+" "+FirstClickedY);
-                    System.out.println(">>>>    cbp("+current_ball_position_X+","+current_ball_position_Y+")  fk("+FirstClickedX+","+FirstClickedY+")   "+"tmp("+TemporaryCBox.get_X()+","+TemporaryCBox.get_Y()+")");
-                    System.out.println("^^^^^     cbp("+board.getCurrent_ball_position_X()+","+board.getCurrent_ball_position_Y()+")");
-                    board.executeMove(TemporaryCBox);
-                    System.out.println("^^^^^     cbp("+board.getCurrent_ball_position_X()+","+board.getCurrent_ball_position_Y()+")");
-                    board.draw(width, height);
-                    if(cond) {
-                        board.switchTurn();
-                        condition = false;
-                    }
-                    if(!board.checkIfPossibleMovesExist() && cond){
-                        board.setWinner("USER");
-                        board.theEnd();
-                    }
-                }*/
             }
         } else {
             exit(0);
@@ -155,7 +102,6 @@ public class CPU implements Serializable{
             }
             exploredAll = true;
         }
-        //exploredAll zawsze będzie mieć tu wartość true (bo opuszczona została petla while
 
         //na tym etapie mamy rekursywne drzewo rozrysowane pokonczone w punktach finalnych
         // ta część kodu wykonywana jest tylko dla liści drzewa możliwość, liści finalnych

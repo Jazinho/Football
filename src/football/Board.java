@@ -120,9 +120,6 @@ public class Board extends JFrame implements Serializable{
         Turn = turn;
     }
 
-
-
-
     public void switchTurn(){
         if(getTurn()=='U')
             setTurn('C');
@@ -131,8 +128,6 @@ public class Board extends JFrame implements Serializable{
         if(getTurn()=='C')
             cpu.cpuMove();
     }
-
-
 
     public CBox getCBox(int x,int y){
         return Fields[y][x];
@@ -217,7 +212,6 @@ public class Board extends JFrame implements Serializable{
 
         Fields[height + 2][width / 2].setRight(true);
         Fields[height + 2][width / 2].setUp(true);
-
     }
 
     public boolean checkIfPossibleMovesExist(){
@@ -326,24 +320,12 @@ public class Board extends JFrame implements Serializable{
     public Board(){
         initialize(9,11);
         this.setSize(BoardWidth, BoardHeight);
-        this.setResizable(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //  this.setResizable(false);
+        this.setResizable(false);
         this.setLocationRelativeTo(null);
         //this.setLocation(315, 5);
         this.setTitle("Football");
 
-        File f = new File("src/resources/background.jpg");
-        BufferedImage myImage = null;
-     /*   try {
-          myImage = ImageIO.read(f);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-*/
-//        Pict = new ImageIcon(getClass().getResource("board.jpg"));
-        //     this.setContentPane(new BoardBackground(myImage));;
         GridLayout layout = new GridLayout(height,width);
         setLayout(layout);
         setUser(new User(this));
@@ -367,7 +349,7 @@ public class Board extends JFrame implements Serializable{
     }
 
     public Board cloneIt(){
-        Board board = null; //new Board(Fields.clone(), 'C');
+        Board board = null;
         try {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream(bos);
