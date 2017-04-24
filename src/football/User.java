@@ -1,9 +1,10 @@
 package football;
 
 import java.awt.event.MouseEvent;
+import java.io.Serializable;
 
 
-public class User {
+public class User implements Serializable {
     Board board;
     int FirstClickedX,FirstClickedY;
     CBox TemporaryCBox;
