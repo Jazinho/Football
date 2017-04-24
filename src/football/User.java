@@ -18,13 +18,11 @@ public class User implements Serializable {
     }
 
     public void move(MouseEvent e){
-        System.out.println("WCHODZE");
         {
             if(board.getTurn()=='U')
             {
                 current_ball_position_X=board.getCurrent_ball_position_X();
                 current_ball_position_Y=board.getCurrent_ball_position_Y();
-                System.out.println("BBBB");
                 FirstClickedX = ((CBox)e.getSource()).get_X();
                 FirstClickedY = ((CBox)e.getSource()).get_Y();
                 TemporaryCBox = (CBox)e.getSource();

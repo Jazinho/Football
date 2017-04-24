@@ -372,31 +372,3 @@ public class Board extends JFrame implements Serializable{
         Board gra = new Board();
     }
 }
-
-
-
-
-
-
-
- /*
-        private void deexecute(){
-            BoardPositions[TemporaryCBox.get_X()][TemporaryCBox.get_Y()] = TemporaryCBox_2.getFigure();
-            TemporaryCBox.setFigure(TemporaryCBox_2.getFigure());
-            TemporaryCBox_2.setFigure(TemporaryCBox_5.getFigure());
-            BoardPositions[TemporaryCBox_2.get_X()][TemporaryCBox_2.get_Y()] = TemporaryCBox_2.getFigure();
-
-        }
-
-        private void deexecuteMove(CBox T1, CBox T2, CBox T3)
-        {
-            TemporaryCBox=T1;
-            TemporaryCBox_2=T2;
-            TemporaryCBox_3=T3;
-
-            TemporaryCBox.setFigure(TemporaryCBox_2.getFigure());
-            BoardPositions[TemporaryCBox.get_X()][TemporaryCBox.get_Y()] = TemporaryCBox.getFigure();
-            TemporaryCBox_2.setFigure(TemporaryCBox_3.getFigure());
-            BoardPositions[TemporaryCBox_2.get_X()][TemporaryCBox_2.get_Y()] = TemporaryCBox_2.getFigure();
-        }
-    */
