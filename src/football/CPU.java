@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import static java.lang.System.exit;
 
 public class CPU implements Serializable{
     Board board;
@@ -55,11 +54,11 @@ public class CPU implements Serializable{
                 condition = false;
 
                 //TODO Refactor isMiddle to isInside in whole project
-                //TODO Delete all redundant images
 
             }
         } else {
-            exit(0);
+            board.setWinner("USER");
+            board.theEnd();
         }
     }
 
