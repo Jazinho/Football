@@ -27,7 +27,16 @@ public class CPU implements Serializable{
                 current_ball_position_X = board.getCurrent_ball_position_X();
                 current_ball_position_Y = board.getCurrent_ball_position_Y();
 
-                LinkedList<CBox> list = calculateMoves(board.cloneIt(), null, board.getCurrent_ball_position_X(), board.getCurrent_ball_position_Y());
+                CBox startingCBox = board.getCBox(current_ball_position_X, current_ball_position_Y);
+                Coords startingCoords = new Coords(startingCBox);
+
+                Coords best = calculateMoves(board.cloneIt(), null, startingCoords);
+                LinkedList<CBox> list = new LinkedList<>();
+                while(best != null){
+                    list.addFirst(best.getcBox());
+                    best = best.getParent();
+                }
+
                 boolean cond = true;
 
                 for (CBox cBox : list) {
@@ -47,9 +56,6 @@ public class CPU implements Serializable{
 
                 //TODO Refactor isMiddle to isInside in whole project
                 //TODO Delete all redundant images
-                //TODO Fix sizes in Board() initialization
-                //TODO i oraz j są w złej kolejności u mnie
-                //Todo Zmienić kolejność dodawania do possibilities (najpierw środek, potem te boczne)
 
             }
         } else {
@@ -57,14 +63,15 @@ public class CPU implements Serializable{
         }
     }
 
-    private LinkedList<CBox> calculateMoves(Board board, List<Coords> possibilities, int curX, int curY) {
-        LinkedList<CBox> res = new LinkedList<>();
+    private Coords calculateMoves(Board board, List<Coords> possibilities, Coords curCoords) {
+
+        int curX = curCoords.getcBox().get_X();
+        int curY = curCoords.getcBox().get_Y();
+
         if (possibilities == null) {
             possibilities = new ArrayList<>();
-            CBox startingCBox = board.getCBox(curX, curY);
-            Coords startingCoords = new Coords(startingCBox);
-            startingCoords.setExplored(true);
-            possibilities.add(startingCoords);
+            curCoords.setExplored(true);
+            possibilities.add(curCoords);
         }
 
         CBox curBox = board.getCBox(curX, curY);
@@ -84,7 +91,7 @@ public class CPU implements Serializable{
                     //CBox jest wewnątrz boiska ( (isMiddle) albo (isEmpty,ale ma kreski - krawędź boiska))
                     if (!curBox.hasDirection(i, j) && !wasVisited && (board.getCBox(curX + i, curY + j).isMiddle() || board.getCBox(curX + i, curY + j).hasAnyLine())) {
                         CBox newCBox = board.getCBox(curX + i, curY + j);
-                        Coords newCords = new Coords(newCBox);
+                        Coords newCords = new Coords(newCBox, curCoords);
                         if (!newCBox.hasAnyLine()) newCords.setFinal(true);
                         possibilities.add(newCords);
                     }
@@ -97,12 +104,9 @@ public class CPU implements Serializable{
                     board.setCurrent_ball_position_Y(curY);//własnie na podstawie current_ball_position
                     board.markMoveOnMap(coords.getcBox());
                     coords.setExplored(true);
-                    res = calculateMoves(board, possibilities, coords.getcBox().get_X(), coords.getcBox().get_Y());
+                    return calculateMoves(board, possibilities, coords);
                     // jakby to wywołanie przeniesć poza powyżsżą petle for to wtedy najpierw szukalibysmy wszerz, a tak to szukamy wgłąb
-                    res.addFirst(coords.getcBox());
-                    //końcowy przypadek: nie wchodzimy wewnątrz tego if'a bo wszystkie node'y na mapie sa finalne
 
-                    return res;
                 }
             }
             exploredAll = true;
@@ -112,25 +116,23 @@ public class CPU implements Serializable{
         // ta część kodu wykonywana jest tylko dla liści drzewa możliwość, liści finalnych
         // (sprawdzane jest który jest najlepszy i ten jest zwracan)
 
-        CBox best = null;
+        Coords best = null;
         for (Coords c : possibilities) {
             if (c.isFinal()) {
                 if (best == null) {
-                    best = c.getcBox();
+                    best = c;
                 } else {
-                    if (c.getcBox().get_Y() > best.get_Y()) {
-                        best = c.getcBox();
-                    }else if(c.getcBox().get_Y() == best.get_Y()){
-                        if(Math.abs(c.getcBox().get_X()-6) < Math.abs(best.get_Y())){
-                            best = c.getcBox();
+                    if (c.getcBox().get_Y() > best.getcBox().get_Y()) {
+                        best = c;
+                    }else if(c.getcBox().get_Y() == best.getcBox().get_Y()){
+                        if(Math.abs(c.getcBox().get_X()-5) < Math.abs(best.getcBox().get_X()-5)){
+                            best = c;
                         }
                     }
                 }
             }
         }
 
-        res.add(best);
-
-        return res;
+        return best;
     }
 }
