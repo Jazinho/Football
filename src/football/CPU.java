@@ -27,10 +27,11 @@ public class CPU implements Serializable{
                 current_ball_position_X = board.getCurrent_ball_position_X();
                 current_ball_position_Y = board.getCurrent_ball_position_Y();
 
-                List<CBox> list = calculateMoves(board.cloneIt(), null, board.getCurrent_ball_position_X(), board.getCurrent_ball_position_Y());
+                LinkedList<CBox> list = calculateMoves(board.cloneIt(), null, board.getCurrent_ball_position_X(), board.getCurrent_ball_position_Y());
                 boolean cond = true;
 
                 for (CBox cBox : list) {
+                    if(current_ball_position_X == cBox.get_X() && current_ball_position_Y == cBox.get_Y()) continue; //pominiecie pierwszego elementu listy, ktory jest startowym polozeniem piłki
                     TemporaryCBox = board.getCBox(cBox.get_X(), cBox.get_Y());
                     board.executeMove(TemporaryCBox);
                     board.draw(width, height);
@@ -56,9 +57,15 @@ public class CPU implements Serializable{
         }
     }
 
-    private List<CBox> calculateMoves(Board board, List<Coords> possibilities, int curX, int curY) {
-        List<CBox> res = new LinkedList<>();
-        if (possibilities == null) possibilities = new ArrayList<>();
+    private LinkedList<CBox> calculateMoves(Board board, List<Coords> possibilities, int curX, int curY) {
+        LinkedList<CBox> res = new LinkedList<>();
+        if (possibilities == null) {
+            possibilities = new ArrayList<>();
+            CBox startingCBox = board.getCBox(curX, curY);
+            Coords startingCoords = new Coords(startingCBox);
+            startingCoords.setExplored(true);
+            possibilities.add(startingCoords);
+        }
 
         CBox curBox = board.getCBox(curX, curY);
         boolean exploredAll = false;
@@ -69,7 +76,7 @@ public class CPU implements Serializable{
 
                     boolean wasVisited = false;
                     for (Coords c : possibilities) {
-                        if (c.getcBox().getX() == curX + i && c.getcBox().getY() == curY + j) wasVisited = true;
+                        if ((c.getcBox().get_X() == curX + i) && (c.getcBox().get_Y() == curY + j)) wasVisited = true;
                     }
 
                     if (i == 0 && j == 0) continue;
@@ -85,12 +92,14 @@ public class CPU implements Serializable{
             }
 
             for (Coords coords : possibilities) {
-                if (!coords.isFinal() && !coords.isExplored()) { //Jeśli dany punkt nie jest punktem końcowy to spenetruj go
+                if (!coords.isFinal() && !coords.isExplored()) { //Jeśli dany punkt nie jest punktem końcowym i nie został wczesniej spenetrowany to spenetruj go
+                    board.setCurrent_ball_position_X(curX);//powinno być, bo 'markMoveOnMap' zaznacza
+                    board.setCurrent_ball_position_Y(curY);//własnie na podstawie current_ball_position
                     board.markMoveOnMap(coords.getcBox());
                     coords.setExplored(true);
                     res = calculateMoves(board, possibilities, coords.getcBox().get_X(), coords.getcBox().get_Y());
                     // jakby to wywołanie przeniesć poza powyżsżą petle for to wtedy najpierw szukalibysmy wszerz, a tak to szukamy wgłąb
-                    res.add(coords.getcBox());
+                    res.addFirst(coords.getcBox());
                     //końcowy przypadek: nie wchodzimy wewnątrz tego if'a bo wszystkie node'y na mapie sa finalne
 
                     return res;
@@ -109,8 +118,12 @@ public class CPU implements Serializable{
                 if (best == null) {
                     best = c.getcBox();
                 } else {
-                    if (c.getcBox().get_Y() < best.get_Y()) {
+                    if (c.getcBox().get_Y() > best.get_Y()) {
                         best = c.getcBox();
+                    }else if(c.getcBox().get_Y() == best.get_Y()){
+                        if(Math.abs(c.getcBox().get_X()-6) < Math.abs(best.get_Y())){
+                            best = c.getcBox();
+                        }
                     }
                 }
             }
