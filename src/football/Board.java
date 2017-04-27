@@ -4,14 +4,11 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
+import java.io.*;
 import javax.swing.*;
-import static java.lang.System.exit;
 
 
-public class Board extends JFrame {
+public class Board extends JFrame implements Serializable{
     private CPU cpu;
     private User user=null;
 
@@ -24,14 +21,14 @@ public class Board extends JFrame {
     private int current_ball_position_X=5;
     private int current_ball_position_Y=7;
 
-    private static CBox[][] Fields = new CBox[height][width];
+    public CBox[][] Fields = new CBox[height][width];
 
     private char Turn = 'U';
 
-public void theEnd(){
-    System.out.println("THE WINNER IS: "+getWinner());
-    while(true){}
-}
+    public void theEnd(){
+        System.out.println("THE WINNER IS: "+getWinner());
+        while(true){}
+    }
 
     public CPU getCpu() {
         return cpu;
@@ -107,11 +104,11 @@ public void theEnd(){
         this.current_ball_position_Y = current_ball_position_Y;
     }
 
-    public static CBox[][] getFields() {
+    public CBox[][] getFields() {
         return Fields;
     }
 
-    public static void setFields(CBox[][] fields) {
+    public void setFields(CBox[][] fields) {
         Fields = fields;
     }
 
@@ -123,9 +120,6 @@ public void theEnd(){
         Turn = turn;
     }
 
-
-
-
     public void switchTurn(){
         if(getTurn()=='U')
             setTurn('C');
@@ -135,19 +129,18 @@ public void theEnd(){
             cpu.cpuMove();
     }
 
-
-
     public CBox getCBox(int x,int y){
         return Fields[y][x];
     }
 
 
     public void initialize(int width, int height) {
-        for (int i = 0; i < height + 4; i++)
+        for (int i = 0; i < height + 4; i++) {
             for (int j = 0; j < width + 2; j++) {
-                Fields[i][j] = new CBox(j,i);
+                Fields[i][j] = new CBox(j, i);
                 Fields[i][j].setEmpty(true);
             }
+        }
 
         for (int i = 3; i < height + 1; i++)
             for (int j = 2; j < width; j++) {
@@ -198,7 +191,6 @@ public void theEnd(){
                     Fields[i][j].setDown(true);
                 }
 
-
         Fields[2][width / 2 + 1].setMiddle(true);
 
         Fields[height + 1][width / 2 + 1].setMiddle(true);
@@ -220,14 +212,7 @@ public void theEnd(){
 
         Fields[height + 2][width / 2].setRight(true);
         Fields[height + 2][width / 2].setUp(true);
-
-
-
-
     }
-    /////////////////////////////////////////////////////
-
-
 
     public boolean checkIfPossibleMovesExist(){
         for(int y=current_ball_position_Y-1; y<=current_ball_position_Y+1; y++)
@@ -256,76 +241,7 @@ public void theEnd(){
 
     public boolean executeMove(CBox TemporaryCBox){
 
-        int x = TemporaryCBox.get_X()-current_ball_position_X;
-        int y = TemporaryCBox.get_Y()-current_ball_position_Y;
-        switch(x){
-            case -1:
-                switch(y){
-                    case -1:
-                        TemporaryCBox.setRight_down(true);
-                        Fields[current_ball_position_Y][current_ball_position_X].setLeft_up(true);
-                        TemporaryCBox.setRight_down(true);
-                        Fields[current_ball_position_Y][current_ball_position_X].setLeft_up(true);
-                        break;
-                    case 0:
-                        TemporaryCBox.setRight(true);
-                        Fields[current_ball_position_Y][current_ball_position_X].setLeft(true);
-
-                        TemporaryCBox.setRight(true);
-                        Fields[current_ball_position_Y][current_ball_position_X].setLeft(true);
-
-                        break;
-                    case 1:
-                        TemporaryCBox.setRight_up(true);
-                        Fields[current_ball_position_Y][current_ball_position_X].setLeft_down(true);
-
-                        TemporaryCBox.setRight_up(true);
-                        Fields[current_ball_position_Y][current_ball_position_X].setLeft_down(true);
-                        break;
-                }
-                break;
-            case 0:
-                switch(y){
-                    case -1:
-                        TemporaryCBox.setDown(true);
-                        Fields[current_ball_position_Y][current_ball_position_X].setUp(true);
-
-                        TemporaryCBox.setDown(true);
-                        Fields[current_ball_position_Y][current_ball_position_X].setUp(true);
-                        break;
-
-                    case 1:
-                        TemporaryCBox.setUp(true);
-                        Fields[current_ball_position_Y][current_ball_position_X].setDown(true);
-
-                        TemporaryCBox.setUp(true);
-                        Fields[current_ball_position_Y][current_ball_position_X].setDown(true);
-                        break;
-                }
-                break;
-            case 1:
-                switch(y){
-                    case -1:
-                        TemporaryCBox.setLeft_down(true);
-                        Fields[current_ball_position_Y][current_ball_position_X].setRight_up(true);
-                        TemporaryCBox.setLeft_down(true);
-                        Fields[current_ball_position_Y][current_ball_position_X].setRight_up(true);
-                        break;
-                    case 0:
-                        TemporaryCBox.setLeft(true);
-                        Fields[current_ball_position_Y][current_ball_position_X].setRight(true);
-                        TemporaryCBox.setLeft(true);
-                        Fields[current_ball_position_Y][current_ball_position_X].setRight(true);
-                        break;
-                    case 1:
-                        TemporaryCBox.setLeft_up(true);
-                        Fields[current_ball_position_Y][current_ball_position_X].setRight_down(true);
-                        TemporaryCBox.setLeft_up(true);
-                        Fields[current_ball_position_Y][current_ball_position_X].setRight_down(true);
-                        break;
-                }
-                break;
-        }
+        markMoveOnMap(TemporaryCBox);
 
         Fields[current_ball_position_Y][current_ball_position_X].repaint();
         current_ball_position_Y=TemporaryCBox.get_Y();
@@ -340,9 +256,59 @@ public void theEnd(){
         if(winner!="NULL")
             theEnd();
 
-
         return true;
+    }
 
+    public void markMoveOnMap(CBox TemporaryCBox){
+
+        int x = TemporaryCBox.get_X()-current_ball_position_X;
+        int y = TemporaryCBox.get_Y()-current_ball_position_Y;
+        switch(x){
+            case -1:
+                switch(y){
+                    case -1:
+                        TemporaryCBox.setRight_down(true);
+                        Fields[current_ball_position_Y][current_ball_position_X].setLeft_up(true);
+                        break;
+                    case 0:
+                        TemporaryCBox.setRight(true);
+                        Fields[current_ball_position_Y][current_ball_position_X].setLeft(true);
+                        break;
+                    case 1:
+                        TemporaryCBox.setRight_up(true);
+                        Fields[current_ball_position_Y][current_ball_position_X].setLeft_down(true);
+                        break;
+                }
+                break;
+            case 0:
+                switch(y){
+                    case -1:
+                        TemporaryCBox.setDown(true);
+                        Fields[current_ball_position_Y][current_ball_position_X].setUp(true);
+                        break;
+                    case 1:
+                        TemporaryCBox.setUp(true);
+                        Fields[current_ball_position_Y][current_ball_position_X].setDown(true);
+                        break;
+                }
+                break;
+            case 1:
+                switch(y){
+                    case -1:
+                        TemporaryCBox.setLeft_down(true);
+                        Fields[current_ball_position_Y][current_ball_position_X].setRight_up(true);
+                        break;
+                    case 0:
+                        TemporaryCBox.setLeft(true);
+                        Fields[current_ball_position_Y][current_ball_position_X].setRight(true);
+                        break;
+                    case 1:
+                        TemporaryCBox.setLeft_up(true);
+                        Fields[current_ball_position_Y][current_ball_position_X].setRight_down(true);
+                        break;
+                }
+                break;
+        }
     }
 
     public void draw(int width, int height){
@@ -354,24 +320,12 @@ public void theEnd(){
     public Board(){
         initialize(9,11);
         this.setSize(BoardWidth, BoardHeight);
-        this.setResizable(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //  this.setResizable(false);
+        this.setResizable(false);
         this.setLocationRelativeTo(null);
         //this.setLocation(315, 5);
         this.setTitle("Football");
 
-        File f = new File("src\\resources\\background.jpg");
-        BufferedImage myImage = null;
-     /*   try {
-          myImage = ImageIO.read(f);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-*/
-//        Pict = new ImageIcon(getClass().getResource("board.jpg"));
-        //     this.setContentPane(new BoardBackground(myImage));;
         GridLayout layout = new GridLayout(height,width);
         setLayout(layout);
         setUser(new User(this));
@@ -394,45 +348,27 @@ public void theEnd(){
         this.setVisible(true);
     }
 
+    public Board cloneIt(){
+        Board board = null;
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(bos);
+            oos.writeObject(this);
+            oos.flush();
+            oos.close();
+            bos.close();
+            byte[] byteData = bos.toByteArray();
+
+            ByteArrayInputStream bais = new ByteArrayInputStream(byteData);
+            board = (Board) new ObjectInputStream(bais).readObject();
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return board;
+    }
+
     public static void main(String[] arg){
         Board gra = new Board();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- /*
-        private void deexecute(){
-            BoardPositions[TemporaryCBox.get_X()][TemporaryCBox.get_Y()] = TemporaryCBox_2.getFigure();
-            TemporaryCBox.setFigure(TemporaryCBox_2.getFigure());
-            TemporaryCBox_2.setFigure(TemporaryCBox_5.getFigure());
-            BoardPositions[TemporaryCBox_2.get_X()][TemporaryCBox_2.get_Y()] = TemporaryCBox_2.getFigure();
-
-        }
-
-        private void deexecuteMove(CBox T1, CBox T2, CBox T3)
-        {
-            TemporaryCBox=T1;
-            TemporaryCBox_2=T2;
-            TemporaryCBox_3=T3;
-
-            TemporaryCBox.setFigure(TemporaryCBox_2.getFigure());
-            BoardPositions[TemporaryCBox.get_X()][TemporaryCBox.get_Y()] = TemporaryCBox.getFigure();
-            TemporaryCBox_2.setFigure(TemporaryCBox_3.getFigure());
-            BoardPositions[TemporaryCBox_2.get_X()][TemporaryCBox_2.get_Y()] = TemporaryCBox_2.getFigure();
-        }
-    */

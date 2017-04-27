@@ -4,22 +4,14 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-class CBox extends JPanel {
+class CBox extends JPanel implements Serializable{
 
    private int XX;
    private int YY;
 
-    BufferedImage image;
+    public transient BufferedImage image;
     private boolean left=false;
     private boolean right=false;
     private boolean up=false;
@@ -32,6 +24,7 @@ class CBox extends JPanel {
     private boolean middle=false;
 
     public boolean isEmpty() {return empty;}
+
     public void setEmpty(boolean empty) {
         this.empty = empty;
         if(empty==true) {
@@ -46,7 +39,9 @@ class CBox extends JPanel {
             this.setLeft_up(false);
         }
     }
+
     public boolean isMiddle() {return middle;}
+
     public void setMiddle(boolean middle) {
         this.middle = middle;
         if(middle==true) {
@@ -61,10 +56,13 @@ class CBox extends JPanel {
             this.setLeft_up(false);
         }
     }
+
     public boolean isRight_up() {return right_up;}
+
     public boolean isLeft() {
         return left;
     }
+
     public void setLeft(boolean left) {
         this.left = left;
         if(left==true) {
@@ -72,9 +70,11 @@ class CBox extends JPanel {
             this.setEmpty(false);
         }
     }
+
     public boolean isRight() {
         return right;
     }
+
     public void setRight(boolean right) {
         this.right = right;
         if(right==true) {
@@ -82,9 +82,11 @@ class CBox extends JPanel {
             this.setEmpty(false);
         }
     }
+
     public boolean isUp() {
         return up;
     }
+
     public void setUp(boolean up) {
         this.up = up;
         if (up == true) {
@@ -92,9 +94,11 @@ class CBox extends JPanel {
             this.setEmpty(false);
         }
     }
+
     public boolean isDown() {
         return down;
     }
+
     public void setDown(boolean down) {
         this.down = down;
         if(down==true) {
@@ -102,9 +106,11 @@ class CBox extends JPanel {
             this.setEmpty(false);
         }
     }
+
     public boolean isLeft_up() {
         return left_up;
     }
+
     public void setLeft_up(boolean left_up) {
         this.left_up = left_up;
         if(left_up==true) {
@@ -112,7 +118,9 @@ class CBox extends JPanel {
             this.setEmpty(false);
         }
     }
+
     public boolean isLeft_down() {return left_down;}
+
     public void setLeft_down(boolean left_down) {
         this.left_down = left_down;
         if (left_down == true) {
@@ -120,6 +128,7 @@ class CBox extends JPanel {
             this.setEmpty(false);
         }
     }
+
     public void setRight_up(boolean right_up) {
         this.right_up = right_up;
         if (right_up == true) {
@@ -127,9 +136,11 @@ class CBox extends JPanel {
             this.setEmpty(false);
         }
     }
+
     public boolean isRight_down() {
         return right_down;
     }
+
     public void setRight_down(boolean right_down) {
         this.right_down = right_down;
         if (right_down == true) {
@@ -162,7 +173,6 @@ class CBox extends JPanel {
     }
 
     public void paintIt(){
-
         String tileName ="";
         if(isUp()){
             tileName=tileName.concat("1");
@@ -194,24 +204,40 @@ class CBox extends JPanel {
             else if(isMiddle())
                 tileName="middle";
         try {
-            image = ImageIO.read(new File("src\\resources\\"+tileName+".png"));
+            image = ImageIO.read(new File("src/resources/"+tileName+".png"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
 
         this.setOpaque(false);
         validate();
-        //this.add(panel1);
-        // this.pack();
         this.setVisible(true);
     }
 
+    public boolean hasDirection(int i, int j){
+        if(i==-1){
+            if(j==-1)return isLeft_up();
+            if(j==0)return isLeft();
+            if(j==1)return isLeft_down();
+        }else if(i==0){
+            if(j==-1)return isUp();
+            if(j==1)return isDown();
+        }else if(i==1){
+            if(j==-1)return isRight_up();
+            if(j==0)return isRight();
+            if(j==1)return isRight_down();
+        }
+        System.out.println("ŻADEN Z KIERUNKÓW NIE ZOSTAŁ WYBRANY");
+        System.exit(0);
+        return true;
+    }
 
-
+    public boolean hasAnyLine(){
+        return up || down || left || right || right_down || right_up || left_down || left_up;
+    }
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(image, 0, 0, this);
     }
-
 }
