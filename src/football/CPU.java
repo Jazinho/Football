@@ -42,8 +42,8 @@ public class CPU implements Serializable{
                     if(current_ball_position_X == cBox.get_X() && current_ball_position_Y == cBox.get_Y()) continue; //pominiecie pierwszego elementu listy, ktory jest startowym polozeniem piłki
                     TemporaryCBox = board.getCBox(cBox.get_X(), cBox.get_Y());
                     board.executeMove(TemporaryCBox);
-                    board.draw(width, height);
                 }
+                board.draw(width, height);
 
                 if (!board.checkIfPossibleMovesExist() && cond) {
                     board.setWinner("USER");
@@ -54,6 +54,7 @@ public class CPU implements Serializable{
                 condition = false;
 
                 //TODO Refactor isMiddle to isInside in whole project
+                //TODO Moving inside the goal from the side
 
             }
         } else {
@@ -86,6 +87,15 @@ public class CPU implements Serializable{
                     }
 
                     if (i == 0 && j == 0) continue;
+
+                    //Dodanie pola wewnątrz bramki, bo normalne warunki na dodanie możliwosci nie sa spełniane (hasDirections)
+                    if(curX + i == 6 && curY + j == 14){
+                        CBox newCBox = board.getCBox(curX + i -1, curY + j - 1);
+                        Coords newCords = new Coords(newCBox, curCoords);
+                        newCords.setFinal(true); //ustawienie jako final, by nie szło dalej za bramke
+                        possibilities.add(newCords);
+                    }
+
                     //Dodajemy nowy Coord, gdy w w jego kierunku nie ma jeszcze kreski oraz nie został odwiedzony juz oraz
                     //CBox jest wewnątrz boiska ( (isMiddle) albo (isEmpty,ale ma kreski - krawędź boiska))
                     if (!curBox.hasDirection(i, j) && !wasVisited && (board.getCBox(curX + i, curY + j).isMiddle() || board.getCBox(curX + i, curY + j).hasAnyLine())) {

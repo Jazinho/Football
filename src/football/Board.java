@@ -3,7 +3,6 @@ package football;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import javax.swing.*;
 
@@ -24,100 +23,11 @@ public class Board extends JFrame implements Serializable{
     public CBox[][] Fields = new CBox[height][width];
 
     private char Turn = 'U';
+    public static boolean isFinished = false;
 
     public void theEnd(){
-        System.out.println("THE WINNER IS: "+getWinner());
-        while(true){}
-    }
-
-    public CPU getCpu() {
-        return cpu;
-    }
-
-    public void setCpu(CPU cpu) {
-        this.cpu = cpu;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public static String getWinner() {
-        return winner;
-    }
-
-
-    public static void setWinner(String winner) {
-        Board.winner = winner;
-    }
-
-    public static int getwidth() {
-        return width;
-    }
-
-
-    public static void setwidth(int width) {
-        Board.width = width;
-    }
-
-    public static int getheight() {
-        return height;
-    }
-
-    public static void setheight(int height) {
-        Board.height = height;
-    }
-
-    public int getBoardHeight() {
-        return BoardHeight;
-    }
-
-    public void setBoardHeight(int boardHeight) {
-        BoardHeight = boardHeight;
-    }
-
-    public int getBoardWidth() {
-        return BoardWidth;
-    }
-
-    public void setBoardWidth(int boardWidth) {
-        BoardWidth = boardWidth;
-    }
-
-    public int getCurrent_ball_position_X() {
-        return current_ball_position_X;
-    }
-
-    public void setCurrent_ball_position_X(int current_ball_position_X) {
-        this.current_ball_position_X = current_ball_position_X;
-    }
-
-    public int getCurrent_ball_position_Y() {
-        return current_ball_position_Y;
-    }
-
-    public void setCurrent_ball_position_Y(int current_ball_position_Y) {
-        this.current_ball_position_Y = current_ball_position_Y;
-    }
-
-    public CBox[][] getFields() {
-        return Fields;
-    }
-
-    public void setFields(CBox[][] fields) {
-        Fields = fields;
-    }
-
-    public char getTurn() {
-        return Turn;
-    }
-
-    public void setTurn(char turn) {
-        Turn = turn;
+        if(!isFinished) System.out.println("THE WINNER IS: "+getWinner());
+        isFinished = true;
     }
 
     public void switchTurn(){
@@ -191,9 +101,11 @@ public class Board extends JFrame implements Serializable{
                     Fields[i][j].setDown(true);
                 }
 
+        Fields[1][width / 2 + 1].setMiddle(true);
         Fields[2][width / 2 + 1].setMiddle(true);
 
         Fields[height + 1][width / 2 + 1].setMiddle(true);
+        Fields[height + 2][width / 2 + 1].setMiddle(true);
 
         Fields[1][width / 2 + 1].setRight(true);
         Fields[1][width / 2 + 1].setLeft(true);
@@ -323,7 +235,6 @@ public class Board extends JFrame implements Serializable{
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
-        //this.setLocation(315, 5);
         this.setTitle("Football");
 
         GridLayout layout = new GridLayout(height,width);
@@ -366,6 +277,95 @@ public class Board extends JFrame implements Serializable{
             e.printStackTrace();
         }
         return board;
+    }
+
+    public CPU getCpu() {
+        return cpu;
+    }
+
+    public void setCpu(CPU cpu) {
+        this.cpu = cpu;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public static String getWinner() {
+        return winner;
+    }
+
+    public static void setWinner(String winner) {
+        Board.winner = winner;
+    }
+
+    public static int getwidth() {
+        return width;
+    }
+
+
+    public static void setwidth(int width) {
+        Board.width = width;
+    }
+
+    public static int getheight() {
+        return height;
+    }
+
+    public static void setheight(int height) {
+        Board.height = height;
+    }
+
+    public int getBoardHeight() {
+        return BoardHeight;
+    }
+
+    public void setBoardHeight(int boardHeight) {
+        BoardHeight = boardHeight;
+    }
+
+    public int getBoardWidth() {
+        return BoardWidth;
+    }
+
+    public void setBoardWidth(int boardWidth) {
+        BoardWidth = boardWidth;
+    }
+
+    public int getCurrent_ball_position_X() {
+        return current_ball_position_X;
+    }
+
+    public void setCurrent_ball_position_X(int current_ball_position_X) {
+        this.current_ball_position_X = current_ball_position_X;
+    }
+
+    public int getCurrent_ball_position_Y() {
+        return current_ball_position_Y;
+    }
+
+    public void setCurrent_ball_position_Y(int current_ball_position_Y) {
+        this.current_ball_position_Y = current_ball_position_Y;
+    }
+
+    public CBox[][] getFields() {
+        return Fields;
+    }
+
+    public void setFields(CBox[][] fields) {
+        Fields = fields;
+    }
+
+    public char getTurn() {
+        return Turn;
+    }
+
+    public void setTurn(char turn) {
+        Turn = turn;
     }
 
     public static void main(String[] arg){
