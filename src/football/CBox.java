@@ -21,14 +21,14 @@ class CBox extends JPanel implements Serializable{
     private boolean right_down=false;
     private boolean right_up=false;
     private boolean empty=true;
-    private boolean middle=false;
+    private boolean inside=false;
 
     public boolean isEmpty() {return empty;}
 
     public void setEmpty(boolean empty) {
         this.empty = empty;
         if(empty==true) {
-            this.setMiddle(false);
+            this.setInside(false);
             this.setUp(false);
             this.setRight_up(false);
             this.setRight(false);
@@ -40,11 +40,11 @@ class CBox extends JPanel implements Serializable{
         }
     }
 
-    public boolean isMiddle() {return middle;}
+    public boolean isInside() {return inside;}
 
-    public void setMiddle(boolean middle) {
-        this.middle = middle;
-        if(middle==true) {
+    public void setInside(boolean inside) {
+        this.inside = inside;
+        if(inside==true) {
             this.setEmpty(false);
             this.setUp(false);
             this.setRight_up(false);
@@ -66,7 +66,7 @@ class CBox extends JPanel implements Serializable{
     public void setLeft(boolean left) {
         this.left = left;
         if(left==true) {
-            this.setMiddle(false);
+            this.setInside(false);
             this.setEmpty(false);
         }
     }
@@ -78,7 +78,7 @@ class CBox extends JPanel implements Serializable{
     public void setRight(boolean right) {
         this.right = right;
         if(right==true) {
-            this.setMiddle(false);
+            this.setInside(false);
             this.setEmpty(false);
         }
     }
@@ -90,7 +90,7 @@ class CBox extends JPanel implements Serializable{
     public void setUp(boolean up) {
         this.up = up;
         if (up == true) {
-            this.setMiddle(false);
+            this.setInside(false);
             this.setEmpty(false);
         }
     }
@@ -102,7 +102,7 @@ class CBox extends JPanel implements Serializable{
     public void setDown(boolean down) {
         this.down = down;
         if(down==true) {
-            this.setMiddle(false);
+            this.setInside(false);
             this.setEmpty(false);
         }
     }
@@ -114,7 +114,7 @@ class CBox extends JPanel implements Serializable{
     public void setLeft_up(boolean left_up) {
         this.left_up = left_up;
         if(left_up==true) {
-            this.setMiddle(false);
+            this.setInside(false);
             this.setEmpty(false);
         }
     }
@@ -124,7 +124,7 @@ class CBox extends JPanel implements Serializable{
     public void setLeft_down(boolean left_down) {
         this.left_down = left_down;
         if (left_down == true) {
-            this.setMiddle(false);
+            this.setInside(false);
             this.setEmpty(false);
         }
     }
@@ -132,7 +132,7 @@ class CBox extends JPanel implements Serializable{
     public void setRight_up(boolean right_up) {
         this.right_up = right_up;
         if (right_up == true) {
-            this.setMiddle(false);
+            this.setInside(false);
             this.setEmpty(false);
         }
     }
@@ -144,7 +144,7 @@ class CBox extends JPanel implements Serializable{
     public void setRight_down(boolean right_down) {
         this.right_down = right_down;
         if (right_down == true) {
-            this.setMiddle(false);
+            this.setInside(false);
             this.setEmpty(false);
         }
     }
@@ -166,7 +166,7 @@ class CBox extends JPanel implements Serializable{
         this.right_down=cbox.isRight_down();
         this.right_up=cbox.isRight_up();
         this.empty=cbox.isEmpty();
-        this.middle=cbox.isMiddle();
+        this.inside=cbox.isInside();
         XX=x;
         YY=y;
         paintIt();
@@ -201,8 +201,8 @@ class CBox extends JPanel implements Serializable{
         if(tileName=="")
             if(isEmpty())
                 tileName="empty";
-            else if(isMiddle())
-                tileName="middle";
+            else if(isInside())
+                tileName="inside";
         try {
             image = ImageIO.read(new File("src/resources/"+tileName+".png"));
         } catch (IOException ex) {

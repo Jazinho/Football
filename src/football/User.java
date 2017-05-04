@@ -46,7 +46,7 @@ public class User implements Serializable {
                         ||(current_ball_position_X>FirstClickedX && current_ball_position_Y==FirstClickedY && !TemporaryCBox.isRight())
                         ||(current_ball_position_X<FirstClickedX && current_ball_position_Y==FirstClickedY && !TemporaryCBox.isLeft()))
                 {
-                    boolean cond = TemporaryCBox.isMiddle();
+                    boolean cond = TemporaryCBox.isInside();
                     board.executeMove(TemporaryCBox);
                     board.draw(width, height);
                     if(cond) {

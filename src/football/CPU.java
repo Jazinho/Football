@@ -53,8 +53,9 @@ public class CPU implements Serializable{
                 board.switchTurn();
                 condition = false;
 
-                //TODO Refactor isMiddle to isInside in whole project
-                //TODO MArk current ball position
+                //TODO Add 'Play again' button displayed after ended game
+                //TODO Add 'Undo' button
+                //TODO Mark current ball position
 
             }
         } else {
@@ -97,8 +98,8 @@ public class CPU implements Serializable{
                     }
 
                     //Dodajemy nowy Coord, gdy w w jego kierunku nie ma jeszcze kreski oraz nie został odwiedzony juz oraz
-                    //CBox jest wewnątrz boiska ( (isMiddle) albo (isEmpty,ale ma kreski - krawędź boiska))
-                    if (!curBox.hasDirection(i, j) && !wasVisited && !isGoalCorner(curX + i, curY + j) && (board.getCBox(curX + i, curY + j).isMiddle() || board.getCBox(curX + i, curY + j).hasAnyLine())) {
+                    //CBox jest wewnątrz boiska ( (isInside) albo (isEmpty,ale ma kreski - krawędź boiska))
+                    if (!curBox.hasDirection(i, j) && !wasVisited && !isGoalCorner(curX + i, curY + j) && (board.getCBox(curX + i, curY + j).isInside() || board.getCBox(curX + i, curY + j).hasAnyLine())) {
                         CBox newCBox = board.getCBox(curX + i, curY + j);
                         Coords newCords = new Coords(newCBox, curCoords);
                         if (!newCBox.hasAnyLine()) newCords.setFinal(true);

@@ -54,7 +54,7 @@ public class Board extends JFrame implements Serializable{
 
         for (int i = 3; i < height + 1; i++)
             for (int j = 2; j < width; j++) {
-                Fields[i][j].setMiddle(true);
+                Fields[i][j].setInside(true);
             }
 
         for (int i = 1; i < height + 3; i++)
@@ -101,9 +101,9 @@ public class Board extends JFrame implements Serializable{
                     Fields[i][j].setDown(true);
                 }
 
-        Fields[2][width / 2 + 1].setMiddle(true);
+        Fields[2][width / 2 + 1].setInside(true);
 
-        Fields[height + 1][width / 2 + 1].setMiddle(true);
+        Fields[height + 1][width / 2 + 1].setInside(true);
 
         Fields[1][width / 2 + 1].setRight(true);
         Fields[1][width / 2 + 1].setLeft(true);
