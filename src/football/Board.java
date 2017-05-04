@@ -101,11 +101,9 @@ public class Board extends JFrame implements Serializable{
                     Fields[i][j].setDown(true);
                 }
 
-        Fields[1][width / 2 + 1].setMiddle(true);
         Fields[2][width / 2 + 1].setMiddle(true);
 
         Fields[height + 1][width / 2 + 1].setMiddle(true);
-        Fields[height + 2][width / 2 + 1].setMiddle(true);
 
         Fields[1][width / 2 + 1].setRight(true);
         Fields[1][width / 2 + 1].setLeft(true);

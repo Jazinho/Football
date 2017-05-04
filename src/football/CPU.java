@@ -54,7 +54,7 @@ public class CPU implements Serializable{
                 condition = false;
 
                 //TODO Refactor isMiddle to isInside in whole project
-                //TODO Moving inside the goal from the side
+                //TODO MArk current ball position
 
             }
         } else {
@@ -89,8 +89,8 @@ public class CPU implements Serializable{
                     if (i == 0 && j == 0) continue;
 
                     //Dodanie pola wewnątrz bramki, bo normalne warunki na dodanie możliwosci nie sa spełniane (hasDirections)
-                    if(curX + i == 6 && curY + j == 14){
-                        CBox newCBox = board.getCBox(curX + i -1, curY + j - 1);
+                    if(curX + i == 5 && curY + j == 13){
+                        CBox newCBox = board.getCBox(curX + i, curY + j);
                         Coords newCords = new Coords(newCBox, curCoords);
                         newCords.setFinal(true); //ustawienie jako final, by nie szło dalej za bramke
                         possibilities.add(newCords);
@@ -98,7 +98,7 @@ public class CPU implements Serializable{
 
                     //Dodajemy nowy Coord, gdy w w jego kierunku nie ma jeszcze kreski oraz nie został odwiedzony juz oraz
                     //CBox jest wewnątrz boiska ( (isMiddle) albo (isEmpty,ale ma kreski - krawędź boiska))
-                    if (!curBox.hasDirection(i, j) && !wasVisited && (board.getCBox(curX + i, curY + j).isMiddle() || board.getCBox(curX + i, curY + j).hasAnyLine())) {
+                    if (!curBox.hasDirection(i, j) && !wasVisited && !isGoalCorner(curX + i, curY + j) && (board.getCBox(curX + i, curY + j).isMiddle() || board.getCBox(curX + i, curY + j).hasAnyLine())) {
                         CBox newCBox = board.getCBox(curX + i, curY + j);
                         Coords newCords = new Coords(newCBox, curCoords);
                         if (!newCBox.hasAnyLine()) newCords.setFinal(true);
@@ -143,5 +143,10 @@ public class CPU implements Serializable{
         }
 
         return best;
+    }
+
+    public boolean isGoalCorner(int X, int Y){
+        if((X == 4 && Y == 13) || (X == 6 && Y == 13)) return true;
+        return false;
     }
 }
