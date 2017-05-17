@@ -1,34 +1,91 @@
 package football;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.*;
-import javax.swing.*;
 
-
+/**
+ * The board extending JFrame that we will be playing on. It aggregates User and CPU object as well as the tiles where
+ * we make moves and replay button
+ * */
 public class Board extends JFrame implements Serializable{
+    /**
+     * static Board reference
+     * */
+    public static Board game=null;
+    /**
+     * CPU reference
+     * */
     private CPU cpu;
+    /**
+     * User reference
+     * */
     private User user=null;
 
+    /**
+     * Describes who is the winner
+     * */
     private static String winner="NULL";
-    private static int width=11,height=15;
-
-    private int BoardHeight=668;
+    /**
+     * Describes how many playing fields vertically
+     * */
+    private static int width=11;
+    /**
+     * Describes how many playing fields horizontally
+     * */
+    private static int height=15;
+    /**
+     * Describes board height in pixels
+     * */
+    private int BoardHeight=715;
+    /**
+     * Describes board width in pixels
+     * */
     private int BoardWidth=478;
 
+    /**
+     * current vertical ball position
+     * */
     private int current_ball_position_X=5;
+
+    /**
+     * current horizontal ball position
+     * */
     private int current_ball_position_Y=7;
 
+
+    /**
+     * array of array of our tiles meaning CBox
+     * */
     public CBox[][] Fields = new CBox[height][width];
 
+    /**
+     * current player turn
+     * */
     private char Turn = 'U';
+
+    /**
+     * determines if the game is over
+     * */
     public static boolean isFinished = false;
+
+    /**
+     * Checks if the game is finished and prints the name of the winner.
+     * Doesn't return anything.
+     */
 
     public void theEnd(){
         if(!isFinished) System.out.println("THE WINNER IS: "+getWinner());
         isFinished = true;
     }
+
+    /**
+     * Switches the turn.
+     * */
 
     public void switchTurn(){
         if(getTurn()=='U')
@@ -39,11 +96,22 @@ public class Board extends JFrame implements Serializable{
             cpu.cpuMove();
     }
 
+    /**
+     *
+     * @param  x    x coordinate of the tile in Fields array
+     * @param  y    y coordinate of the tile in Fields array
+     * @return      the tile at a specified position
+     * @see         CBox
+     */
     public CBox getCBox(int x,int y){
         return Fields[y][x];
     }
 
-
+    /**
+     * Initializes the Fields array with CBox elements
+     * @param  width  width of our football pitch
+     * @param  height width of our football pitch
+     */
     public void initialize(int width, int height) {
         for (int i = 0; i < height + 4; i++) {
             for (int j = 0; j < width + 2; j++) {
@@ -124,6 +192,10 @@ public class Board extends JFrame implements Serializable{
         Fields[height + 2][width / 2].setUp(true);
     }
 
+    /**
+     * Checks whether possible moves exist or not
+     * @return      response if the possible move exists or not
+     */
     public boolean checkIfPossibleMovesExist(){
         for(int y=current_ball_position_Y-1; y<=current_ball_position_Y+1; y++)
             for(int x=current_ball_position_X-1;x<=current_ball_position_X+1; x++) {
@@ -149,7 +221,13 @@ public class Board extends JFrame implements Serializable{
         return false;
     }
 
-    public boolean executeMove(CBox TemporaryCBox){
+    /**
+     * Makes a move and checks if there is already a winner
+     * @param  TemporaryCBox the tile that we want to move to
+     * @see    CBox
+     */
+
+    public void executeMove(CBox TemporaryCBox){
 
         markMoveOnMap(TemporaryCBox);
 
@@ -165,9 +243,13 @@ public class Board extends JFrame implements Serializable{
             winner="CPU";
         if(winner!="NULL")
             theEnd();
-
-        return true;
     }
+
+    /**
+     * Set appropriate fields in CBox where the current ball's position field and the field where we want to move
+     * @param  TemporaryCBox the tile that we want to move to
+     * @see    CBox
+     */
 
     public void markMoveOnMap(CBox TemporaryCBox){
 
@@ -220,6 +302,11 @@ public class Board extends JFrame implements Serializable{
                 break;
         }
     }
+    /**
+     * Repaints the whole board
+     * @param  width    board width
+     * @param  height   board height
+     */
 
     public void draw(int width, int height){
         for(int i=0; i<height; i++)
@@ -227,16 +314,31 @@ public class Board extends JFrame implements Serializable{
                 (Fields[i][j]).paintIt();
     }
 
+
+    /**
+     * initializes the board with empty tiles, adds ActionListeners to the tiles and creates the replay button
+     * */
     public Board(){
+        JPanel panel = new JPanel();
+        JButton button = new JButton("replay");
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                initializeGame();
+            }
+        });
+        panel.add(button);
+        panel.setVisible(true);
+
         initialize(9,11);
-        this.setSize(BoardWidth, BoardHeight);
+        setSize(BoardWidth, BoardHeight);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setTitle("Football");
-
-        GridLayout layout = new GridLayout(height,width);
-        setLayout(layout);
+        GridLayout layout = new GridLayout(height+1,width);
+        FlowLayout fl = new FlowLayout();
+        this.setLayout(layout);
         setUser(new User(this));
         setCpu(new CPU(this));
         for(int i=0; i < height; i++)
@@ -254,8 +356,21 @@ public class Board extends JFrame implements Serializable{
                 add(cb);
                 Fields[i][j]=cb;
             }
+        this.add(new JPanel());
+        this.add(new JPanel());
+        this.add(new JPanel());
+        this.add(new JPanel());
+        this.add(new JPanel());
+
+        this.add(panel);
+        setVisible(true);
         this.setVisible(true);
     }
+
+    /**
+     * Clones the board
+     @return copy of the board
+     */
 
     public Board cloneIt(){
         Board board = null;
@@ -277,16 +392,8 @@ public class Board extends JFrame implements Serializable{
         return board;
     }
 
-    public CPU getCpu() {
-        return cpu;
-    }
-
     public void setCpu(CPU cpu) {
         this.cpu = cpu;
-    }
-
-    public User getUser() {
-        return user;
     }
 
     public void setUser(User user) {
@@ -305,57 +412,36 @@ public class Board extends JFrame implements Serializable{
         return width;
     }
 
-
-    public static void setwidth(int width) {
-        Board.width = width;
-    }
-
     public static int getheight() {
         return height;
     }
 
-    public static void setheight(int height) {
-        Board.height = height;
-    }
-
-    public int getBoardHeight() {
-        return BoardHeight;
-    }
-
-    public void setBoardHeight(int boardHeight) {
-        BoardHeight = boardHeight;
-    }
-
-    public int getBoardWidth() {
-        return BoardWidth;
-    }
-
-    public void setBoardWidth(int boardWidth) {
-        BoardWidth = boardWidth;
-    }
-
+    /**
+     * returns current vertical ball's position
+     * */
     public int getCurrent_ball_position_X() {
         return current_ball_position_X;
     }
 
+    /**
+     * sets current vertical ball's position
+     * */
     public void setCurrent_ball_position_X(int current_ball_position_X) {
         this.current_ball_position_X = current_ball_position_X;
     }
 
+    /**
+     * returns current horizontal ball's position
+     * */
     public int getCurrent_ball_position_Y() {
         return current_ball_position_Y;
     }
 
+    /**
+     * sets current horizontal ball's position
+     * */
     public void setCurrent_ball_position_Y(int current_ball_position_Y) {
         this.current_ball_position_Y = current_ball_position_Y;
-    }
-
-    public CBox[][] getFields() {
-        return Fields;
-    }
-
-    public void setFields(CBox[][] fields) {
-        Fields = fields;
     }
 
     public char getTurn() {
@@ -366,7 +452,17 @@ public class Board extends JFrame implements Serializable{
         Turn = turn;
     }
 
-    public static void main(String[] arg){
-        Board gra = new Board();
+    /**
+     * removes old game and creates a new one
+     * */
+    public static void initializeGame(){
+        if(!(game==null))
+            game.setVisible(false);
+        game = new Board();
     }
+
+    public static void main(String[] arg){
+        initializeGame();
+    }
+
 }

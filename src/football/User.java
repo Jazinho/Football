@@ -3,20 +3,56 @@ package football;
 import java.awt.event.MouseEvent;
 import java.io.Serializable;
 
-
+/**
+ * Represents the user player
+ *  */
 public class User implements Serializable {
+    /**
+     * Board reference
+     * */
     Board board;
-    int FirstClickedX,FirstClickedY;
+    /**
+     * vertical coordinate of the fieldwhre we want to move
+     * */
+    int FirstClickedX;
+    /**
+     * horizontal coordinate of the fieldwhre we want to move
+     * */
+    int FirstClickedY;
+    /**
+     * additional tile which is helpful when makingmove
+     * */
     CBox TemporaryCBox;
-    int current_ball_position_X,current_ball_position_Y;
-    int height,width;
+    /**
+     * vertical coordinate of the current ball position
+     * */
+    int current_ball_position_X;
+    /**
+     * horizontal coordinate of the current ball position
+     * */
+    int current_ball_position_Y;
+    /**
+     * height of the board
+     * */
+    int height;
+    /**
+     * width of the board
+     * */
+    int width;
+    /**
+     * Coord constructor
+     * @param board tile
+     * */
 
     public User(Board board){
         this.board=board;
         height=board.getheight();
         width=board.getwidth();
     }
-
+    /**
+     * Reads user's mouse event and if the chosen move is a valid move then executes it, repaints the boardand switches turn
+     * @param  e user's mouse event
+     */
     public void move(MouseEvent e){
         {
             if(board.getTurn()=='U')

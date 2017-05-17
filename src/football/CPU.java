@@ -5,11 +5,18 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Represents the computer player
+ *  */
 public class CPU implements Serializable{
     Board board;
     int current_ball_position_X, current_ball_position_Y;
     CBox TemporaryCBox;
     int width, height;
+    /**
+     * CPU constructor
+     * @param board our board
+     * */
 
     public CPU(Board board) {
         this.board = board;
@@ -17,6 +24,11 @@ public class CPU implements Serializable{
         width = 11;
     }
 
+    /**
+     * This method is responsible for computer's move. It checks if there is any possible move and if there is, it calculates the best option
+     * using calculateMoves(Board board, List{Coords} possibilities, Coords curCoords) method. If the game is finished it prints the winner
+     * or switches the turn otherwise.
+     * */
     public void cpuMove() {
         if (board.checkIfPossibleMovesExist()) {
 
@@ -52,18 +64,20 @@ public class CPU implements Serializable{
 
                 board.switchTurn();
                 condition = false;
-
-                //TODO Add 'Play again' button displayed after ended game
-                //TODO Add 'Undo' button
-                //TODO Mark current ball position
-
             }
         } else {
             board.setWinner("USER");
             board.theEnd();
         }
     }
-
+    /**
+     * Searches for the best option using depth-first algorithm.
+     *
+     * @param  board  the whole board that we are playing on
+     * @param  possibilities list of possible tiles that we can move to
+     * @param  curCoords current tile that we examine
+     * @return      the best tile that we should move to
+     */
     private Coords calculateMoves(Board board, List<Coords> possibilities, Coords curCoords) {
 
         int curX = curCoords.getcBox().get_X();
@@ -146,6 +160,12 @@ public class CPU implements Serializable{
         return best;
     }
 
+    /**
+     * Determines if there is a goal corner at given coordinates
+     * @param  X  vertical coordinate of the board
+     * @param  Y  horizontal coordinate of the board
+     * @return information if there is a goal corner at given coordinates
+     */
     public boolean isGoalCorner(int X, int Y){
         if((X == 4 && Y == 13) || (X == 6 && Y == 13)) return true;
         return false;

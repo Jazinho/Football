@@ -6,21 +6,74 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 
+/**
+ * Extends JPanel and represents one tile in our game. We play the game by clicking on them. It contains information about the line directions
+ * */
 class CBox extends JPanel implements Serializable{
 
+    /**
+     * vertical coordinates
+     * */
    private int XX;
+
+    /**
+     * horizontal coordinates
+     * */
    private int YY;
 
+    /**
+     * tile's image
+     * */
     public transient BufferedImage image;
+
+    /**
+     * tells if there is a left line
+     * */
     private boolean left=false;
+
+    /**
+     * tells if there is a rigt line
+     * */
     private boolean right=false;
+
+    /**
+     * tells if there is an up line
+     * */
     private boolean up=false;
+
+    /**
+     * tells if there is a down line
+     * */
     private boolean down=false;
+
+    /**
+     * tells if there is a left-up line
+     * */
     private boolean left_up=false;
+
+    /**
+     * tells if there is a left-down line
+     * */
     private boolean left_down=false;
+
+    /**
+     * tells if there is a right-down line
+     * */
     private boolean right_down=false;
+
+    /**
+     * tells if there is a right-up line
+     * */
     private boolean right_up=false;
+
+    /**
+     * tells if the field is empty
+     * */
     private boolean empty=true;
+
+    /**
+     * tells if the field is valid tile that we can move to
+     * */
     private boolean inside=false;
 
     public boolean isEmpty() {return empty;}
@@ -149,13 +202,28 @@ class CBox extends JPanel implements Serializable{
         }
     }
 
+    /**
+     * returns vertical field coordinate
+     * */
     public int get_X() {return XX;}
+
+    /**
+     * returns horizontal field coordinate
+     * */
     public int get_Y() {return YY;}
+
+    /**
+     * constructs a tile with a given coordinates and paints it
+     * */
     public CBox(int x, int y) {
         XX=x;
         YY=y;
         paintIt();
     }
+
+    /**
+     * construct a tile with another tile and given coordinates
+     * */
     public CBox(CBox cbox,int x, int y) {
         this.left=cbox.isLeft();
         this.right=cbox.isRight();
@@ -172,6 +240,10 @@ class CBox extends JPanel implements Serializable{
         paintIt();
     }
 
+
+    /**
+     * Determines how a tile looks like and paints it
+     */
     public void paintIt(){
         String tileName ="";
         if(isUp()){
@@ -214,6 +286,11 @@ class CBox extends JPanel implements Serializable{
         this.setVisible(true);
     }
 
+    /**
+     * Determines if the direction has been chosen
+     * @param  i  vertical coordinate of the new position minus current position
+     * @param  j  horizontal coordinate of the new position minus current position
+     */
     public boolean hasDirection(int i, int j){
         if(i==-1){
             if(j==-1)return isLeft_up();
@@ -227,15 +304,21 @@ class CBox extends JPanel implements Serializable{
             if(j==0)return isRight();
             if(j==1)return isRight_down();
         }
-        System.out.println("ŻADEN Z KIERUNKÓW NIE ZOSTAŁ WYBRANY");
+        System.out.println("NO DIRECTION HAS BEEN CHOSEN");
         System.exit(0);
         return true;
     }
-
+    /**
+     * Determines if there is already painted any line
+     */
     public boolean hasAnyLine(){
         return up || down || left || right || right_down || right_up || left_down || left_up;
     }
 
+    /**
+     * Swing method to paint component
+     * @param  g  graphic context
+     */
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(image, 0, 0, this);
